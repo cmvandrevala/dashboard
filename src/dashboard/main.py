@@ -1,6 +1,7 @@
 from dash import Dash, html
 import dash_bootstrap_components as dbc
 import pandas as pd
+import yaml
 
 def create_raw_df(filepath):
   df = pd.read_csv(filepath)
@@ -18,21 +19,14 @@ def create_raw_df(filepath):
   return df
 
 def remove_unneeded_entries(df):
-  unneeded_entries = [
-    "Get to Inbox Zero for Discord Messages",
-    "Get to Inbox Zero for Emails",
-    "Get to Inbox Zero for Slack",
-    "Get to Inbox Zero for Voicemail Messages",
-    "Get to Inbox Zero for What’s App Messages",
-    "Get to Inbox Zero for Text Messages",
-    "Get to Inbox Zero for Microsoft Teams",
-    "Every Week",
-    "Every Month",
-    "Pack Lunches",
-    "February",
-    "October",
-    "November"
-  ]
+  unneeded_entries = []
+
+  with open("./unneeded_entries.yml") as stream:
+    try:
+        unneeded_entries = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
+
   return df[df["Name"].isin(unneeded_entries) == False]
 
 def urgent_condition(df):
