@@ -2,20 +2,24 @@ from dash import Dash, html
 import dash_bootstrap_components as dbc
 import pandas as pd
 import yaml
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 def create_raw_df(filepath):
   df = pd.read_csv(filepath)
   df = df.drop("Context", axis=1)
   df = df.drop("Completion Date", axis=1)
   df = df.drop("Duration", axis=1)
-  df = df.drop("Flagged", axis=1)
   df = df.drop("Planned Date", axis=1)
+  df = df.drop("Project", axis=1)
   df = df.drop("Notes", axis=1)
   df = df.drop("Start Date", axis=1)
   df = df.drop("Status", axis=1)
   df = df.drop("Tags", axis=1)
+  df = df.drop("Type", axis=1)
   df = df.drop("Task ID", axis=1)
   df['Due Date'] = pd.to_datetime(df['Due Date'])
+  print(df)
   return df
 
 def remove_unneeded_entries(df):
@@ -30,10 +34,10 @@ def remove_unneeded_entries(df):
   return df[df["Name"].isin(unneeded_entries) == False]
 
 def urgent_condition(df):
-  return (df['Due Date'].notnull() & (df['Due Date'] < "2025-12-01"))
+  return (df['Due Date'].notnull() & (df['Due Date'] <= datetime.now(ZoneInfo("UTC")) + pd.to_timedelta("1 W")))
 
 def important_condition(df):
-  return (df['Name'].notnull())
+  return (df['Flagged'] == True)
 
 def urgent(df):
   return df.where(urgent_condition(df))
