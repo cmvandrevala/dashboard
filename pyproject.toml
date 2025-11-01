@@ -8,12 +8,15 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "dash (>=3.2.0)"
+  "dash (>=3.2.0)",
+  "pandas (>=2.3.3,<3.0.0)"
 ]
 
 [tool.poetry]
 packages = [{include = "dashboard", from = "src"}]
 
+[project.scripts]
+dashboard = 'dashboard.main:start'
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
