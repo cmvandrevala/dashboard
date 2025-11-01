@@ -6,7 +6,7 @@ authors = [
     {name = "Cyrus Vandrevala",email = "cyrus.vandrevala@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
   "dash (>=3.2.0)"
 ]
