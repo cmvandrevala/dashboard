@@ -39,5 +39,42 @@ def test_urgent_and_important_does_not_return_an_important_item_which_is_due_in_
     df = pd.DataFrame(data={'Due Date': [due_date], 'Flagged': [True]})
     assert len(df) == 1
     urgent_and_important = EisenhowerMatrix(df).urgent_and_important()
-    print(urgent_and_important)
     assert len(urgent_and_important) == 0
+
+def test_urgent_not_important_returns_an_empty_df_given_an_empty_df():
+    df = pd.DataFrame(data={'Due Date': [], 'Flagged': []})
+    assert len(df) == 0
+    urgent_not_important = EisenhowerMatrix(df).urgent_not_important()
+    assert len(urgent_not_important) == 0
+
+def test_urgent_not_important_filters_out_important_items():
+    due_date = datetime.now(ZoneInfo("UTC")) + pd.to_timedelta("1 day")
+    df = pd.DataFrame(data={'Due Date': [due_date], 'Flagged': [True]})
+    assert len(df) == 1
+    urgent_not_important = EisenhowerMatrix(df).urgent_not_important()
+    assert len(urgent_not_important) == 0
+
+def test_urgent_not_important_returns_a_not_important_item_which_is_due_in_one_day():
+    due_date = datetime.now(ZoneInfo("UTC")) + pd.to_timedelta("1 day")
+    df = pd.DataFrame(data={'Due Date': [due_date], 'Flagged': [False]})
+    assert len(df) == 1
+    urgent_not_important = EisenhowerMatrix(df).urgent_not_important()
+    assert len(urgent_not_important) == 1
+    assert urgent_not_important.iloc[0]["Due Date"] == due_date
+    assert not urgent_not_important.iloc[0]["Flagged"]
+
+def test_urgent_not_important_returns_a_not_important_item_which_is_due_in_one_week():
+    due_date = datetime.now(ZoneInfo("UTC")) + pd.to_timedelta("1 W")
+    df = pd.DataFrame(data={'Due Date': [due_date], 'Flagged': [False]})
+    assert len(df) == 1
+    urgent_not_important = EisenhowerMatrix(df).urgent_not_important()
+    assert len(urgent_not_important) == 1
+    assert urgent_not_important.iloc[0]["Due Date"] == due_date
+    assert not urgent_not_important.iloc[0]["Flagged"]
+
+def test_urgent_not_important_filters_out_a_not_important_item_which_is_due_in_eight_days():
+    due_date = datetime.now(ZoneInfo("UTC")) + pd.to_timedelta("8 D")
+    df = pd.DataFrame(data={'Due Date': [due_date], 'Flagged': [False]})
+    assert len(df) == 1
+    urgent_not_important = EisenhowerMatrix(df).urgent_not_important()
+    assert len(urgent_not_important) == 0
