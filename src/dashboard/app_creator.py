@@ -1,11 +1,12 @@
 from dash import Dash, html
+from dashboard.eisenhower_matrix import EisenhowerMatrix
 import dash_bootstrap_components as dbc
 
 class AppCreator:
   eisenhower = None
 
-  def __init__(self, eisenhower):
-    self.eisenhower = eisenhower
+  def __init__(self, df):
+    self.eisenhower = EisenhowerMatrix(df)
 
   def execute(self):
     app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])

@@ -1,11 +1,12 @@
 from dashboard.app_creator import AppCreator
 from dashboard.data_importer import DataImporter
-from dashboard.eisenhower_matrix import EisenhowerMatrix
+
+global_df = None
 
 def start():
-  df = DataImporter().import_csv("./Omnifocus.csv")
-  eisenhower = EisenhowerMatrix(df)
-  AppCreator(eisenhower).execute().run(debug=True)
+  global global_df
+  global_df = DataImporter().import_csv("./Omnifocus.csv")
+  AppCreator(global_df).execute().run(debug=True)
 
 if __name__ == '__main__':
     start()
