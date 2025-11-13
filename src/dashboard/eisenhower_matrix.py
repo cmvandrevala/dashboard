@@ -30,13 +30,13 @@ class EisenhowerMatrix:
       return df.loc[self.__urgent_condition(df)]
 
     def __not_urgent(self, df):
-      return df.mask(self.__urgent_condition(df))
+      return df.loc[~self.__urgent_condition(df)]
 
     def __important(self, df):
       return df.loc[self.__important_condition(df)]
 
     def __not_important(self, df):
-      return df.mask(self.__important_condition(df))
+      return df.loc[~self.__important_condition(df)]
 
     def __sort_by_due_date(self, df):
       return df.sort_values(by=['Due Date'])
