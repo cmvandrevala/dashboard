@@ -8,6 +8,7 @@ class DataImporter:
 
     def import_csv(self, filepath):
       self.df = pd.read_csv(filepath)
+      DataCleaner.build_tree(self.df);
       self.df = DataCleaner.drop_unused_columns(self.df);
       self.df = DataCleaner.format_due_date(self.df);
       self.__remove_unneeded_entries();
